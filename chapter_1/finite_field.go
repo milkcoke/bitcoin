@@ -100,3 +100,35 @@ func Divide(aField, bField *finiteField) (*finiteField, error) {
 	var resultNumber int = (aField.number) * int(math.Floor(math.Pow(float64(bField.number), float64(aField.prime-2)))) % int(aField.prime)
 	return &finiteField{resultNumber, aField.prime}, nil
 }
+
+func TestFiniteField() {
+
+	// https://stackoverflow.com/questions/43018206/modulo-of-negative-integers-in-go
+	// golang 의 modulo 연산은 음수를 뱉는다.
+	//fmt.Println((-5) % 3)
+
+	// order: 위수
+	var order uint = 57
+	var order2 uint = 13
+	var order3 uint = 31
+
+	a := NewFiniteField(44, order)
+	b := NewFiniteField(33, order)
+	c := NewFiniteField(9, order)
+	d := NewFiniteField(29, order)
+	e := NewFiniteField(3, order2)
+	f := NewFiniteField(12, order2)
+	g := NewFiniteField(10, order2)
+
+	dividend := NewFiniteField(3, order3)
+	divisor := NewFiniteField(24, order3)
+	result1, _ := Add(a, b)
+	result2, _ := Subtract(c, d)
+	result3, _ := Multiply(e, f)
+	result4, _ := Divide(dividend, divisor)
+	fmt.Printf("result1 : %d, result2: %d\n", result1.GetNumber(), result2.GetNumber())
+	// %t is bool format in go
+	fmt.Printf("result3: %t\n", result3.GetNumber() == g.GetNumber())
+
+	fmt.Printf("result4: %d", result4.GetNumber())
+}
