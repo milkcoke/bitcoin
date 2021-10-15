@@ -13,6 +13,7 @@ var errInfiniteValue error = errors.New("invalid parameter (x or y is infinite v
 var errNotOnSameGraph error = errors.New("not on same graph")
 
 // Regular expression :  y^2 = x^3 + ax^2 + b
+// 실수 버전
 type ellipticCurve struct {
 	x int
 	y int
@@ -32,8 +33,13 @@ func NewEllipticCurve(x, y, a, b int) (*ellipticCurve, error) {
 		return nil, errInfiniteValue
 	}
 
+	// 192, 105, 0, 7
 	// validate equation
 	if math.Pow(float64(y), 2) != math.Pow(float64(x), 3)+float64(a*x)+float64(b) {
+		leftValue := math.Pow(float64(y), 2)
+		rightValue := math.Pow(float64(x), 3) + float64(0*x) + float64(b)
+		fmt.Printf("left: %f, right: %f\n", leftValue, rightValue)
+
 		fmt.Printf("Failed to create ellipticCurve on coordinate (x:%d, y:%d)\n", x, y)
 		return nil, errInvalidParameter
 	} else {

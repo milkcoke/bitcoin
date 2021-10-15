@@ -95,10 +95,35 @@ func Multiply(aField, bField *finiteField) (*finiteField, error) {
 
 }
 
+// 여기서 값 유실됨
 func Divide(aField, bField *finiteField) (*finiteField, error) {
-	//var resultNumber int = (aField.number * int(math.Floor(math.Pow(float64(bField.number), float64(aField.prime-2))))) % int(aField.prime)
-	var resultNumber int = (aField.number) * int(math.Floor(math.Pow(float64(bField.number), float64(aField.prime-2)))) % int(aField.prime)
-	return &finiteField{resultNumber, aField.prime}, nil
+	//var resultNumber int = aField.number * int(math.Pow(float64(bField.number), float64(aField.prime-2))) % int(aField.prime)
+	fmt.Println(float64(aField.number) * math.Pow(float64(bField.number), float64(aField.prime-2)))
+	resultNumber := int64(float64(aField.number)*math.Pow(float64(bField.number), float64(aField.prime-2))) % int64(aField.prime)
+	fmt.Println(resultNumber)
+	return &finiteField{int(resultNumber), aField.prime}, nil
+}
+
+func Pow(aField *finiteField, exponent int) (*finiteField, error) {
+
+	// Initialize
+	resultNumber := 1
+	number := aField.number
+
+	// if number >= exponent update it
+	number %= exponent
+
+	for exponent > 0 {
+		if exponent&1 == 1 {
+			resultNumber = resultNumber * number % int(aField.prime)
+		}
+
+		exponent = exponent >> 1
+		number = number * number % int(aField.prime)
+	}
+
+	return NewFiniteField(resultNumber, aField.prime), nil
+
 }
 
 func TestFiniteField() {
